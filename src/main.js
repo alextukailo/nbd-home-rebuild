@@ -534,3 +534,134 @@ cookieActions.forEach(([id, value]) => {
       }
     });
 });
+
+
+function typeText(element, text, duration) {
+  return new Promise((resolve) => {
+    const characters = Array.from(text);
+
+    let startTime = null;
+
+    element.classList.add('typing-active');
+
+    function animate(timestamp) {
+      if (startTime === null) {
+        startTime = timestamp;
+      }
+
+      const progress = Math.min(
+        (timestamp - startTime) / duration,
+        1
+      );
+
+      const visibleCount = Math.floor(
+        progress * characters.length
+      );
+
+      element.textContent = characters
+        .slice(0, visibleCount)
+        .join('');
+
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        element.textContent = text;
+        element.classList.remove('typing-active');
+        resolve();
+      }
+    }
+
+    requestAnimationFrame(animate);
+  });
+}
+
+async function playHeroTypingAnimation() {
+  const hero = document.querySelector('#slide-1');
+
+  if (!hero) return;
+
+  const reducedMotion = window.matchMedia(
+    '(prefers-reduced-motion: reduce)'
+  ).matches;
+
+  if (reducedMotion) return;
+
+  const title = hero.querySelector('h1');
+  const titleParts = Array.from(
+    title?.querySelectorAll('.hero-accent') ?? []
+  );
+  const subtitle = hero.querySelector('h2');
+  const description = hero.querySelector('p');
+
+  if (
+    !title ||
+    titleParts.length !== 2 ||
+    !subtitle ||
+    !description
+  ) {
+    return;
+  }
+
+  const elements = [
+    ...titleParts,
+    subtitle,
+    description,
+  ];
+
+  const durations = [
+    250,
+    450,
+    600,
+    1100,
+  ];
+
+  const originalTexts = elements.map((element) =>
+    element.textContent.replace(/\s+/g, ' ').trim()
+  );
+
+  const layoutElements = [
+    title,
+    subtitle,
+    description,
+  ];
+
+  layoutElements.forEach((element) => {
+    const height = element.getBoundingClientRect().height;
+    element.style.minHeight = `${Math.ceil(height)}px`;
+  });
+
+  title.setAttribute(
+    'aria-label',
+    originalTexts.slice(0, 2).join(' ')
+  );
+
+  subtitle.setAttribute('aria-label', originalTexts[2]);
+
+  elements.forEach((element) => {
+    element.textContent = '';
+  });
+
+  await new Promise((resolve) => {
+    requestAnimationFrame(resolve);
+  });
+
+  for (let index = 0; index < elements.length; index++) {
+    await typeText(
+      elements[index],
+      originalTexts[index],
+      durations[index]
+    );
+
+    if (index < elements.length - 1) {
+      await new Promise((resolve) => {
+        setTimeout(resolve, 120);
+      });
+    }
+  }
+
+  layoutElements.forEach((element) => {
+    element.style.removeProperty('min-height');
+  });
+}
+
+playHeroTypingAnimation();
