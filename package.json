@@ -1,0 +1,19 @@
+{
+  "name": "nbd-tailwind-homepage-prototype",
+  "version": "1.0.0",
+  "author": "Alex Tukaylo",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build",
+    "preview": "vite preview",
+    "format": "prettier --write index.html src/**/*.{js,css}"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.0",
+    "tailwindcss": "^4.1.0",
+    "vite": "^7.0.0",
+    "prettier": "^3.6.0"
+  }
+}

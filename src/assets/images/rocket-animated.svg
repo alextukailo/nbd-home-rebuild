@@ -1,0 +1,150 @@
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 554 872"
+  fill="none"
+>
+  <defs>
+    <!-- Clip the original photograph to keep the rocket itself -->
+    <clipPath id="rocket-clip">
+      <rect x="0" y="0" width="554" height="500" />
+    </clipPath>
+
+    <!-- Engine flame gradient -->
+    <linearGradient id="flame-gradient" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="20%" stop-color="#FFFCE0" />
+      <stop offset="50%" stop-color="#FFE5A1" />
+      <stop offset="80%" stop-color="#FF8D4B" />
+      <stop offset="100%" stop-color="#E84A32" stop-opacity="0" />
+    </linearGradient>
+
+    <!-- Bright central exhaust -->
+    <linearGradient id="flame-core" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="70%" stop-color="#FFF9E9" />
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0" />
+    </linearGradient>
+
+    <!-- Smoke gradients -->
+    <radialGradient id="smoke-white">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.95" />
+      <stop offset="55%" stop-color="#FFF8E8" stop-opacity="0.7" />
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0" />
+    </radialGradient>
+
+    <radialGradient id="smoke-orange">
+      <stop offset="0%" stop-color="#FFB58C" stop-opacity="0.8" />
+      <stop offset="65%" stop-color="#F86C48" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#F86C48" stop-opacity="0" />
+    </radialGradient>
+
+    <filter id="blur-large" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="20" />
+    </filter>
+
+    <filter id="blur-small" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="8" />
+    </filter>
+  </defs>
+
+  <!-- Smoke behind rocket -->
+  <g id="smoke-back">
+    <ellipse
+      cx="180"
+      cy="540"
+      rx="140"
+      ry="95"
+      fill="url(#smoke-white)"
+      filter="url(#blur-large)"
+    />
+
+    <ellipse
+      cx="374"
+      cy="540"
+      rx="140"
+      ry="95"
+      fill="url(#smoke-white)"
+      filter="url(#blur-large)"
+    />
+
+    <ellipse
+      cx="277"
+      cy="595"
+      rx="120"
+      ry="135"
+      fill="url(#smoke-orange)"
+      filter="url(#blur-large)"
+    />
+  </g>
+
+  <!-- Exhaust flame -->
+  <g id="engine-flame">
+    <path
+      d="
+        M 240 475
+        C 195 545, 210 610, 247 685
+        C 225 750, 245 820, 277 872
+        C 310 815, 332 750, 306 685
+        C 345 595, 355 535, 315 475
+        Z
+      "
+      fill="url(#flame-gradient)"
+      filter="url(#blur-small)"
+    />
+
+    <path
+      d="
+        M 260 485
+        C 240 555, 253 630, 265 700
+        C 250 770, 265 840, 277 872
+        C 292 825, 304 770, 290 700
+        C 303 625, 315 550, 294 485
+        Z
+      "
+      fill="url(#flame-core)"
+    />
+  </g>
+
+  <!-- Foreground exhaust smoke -->
+  <g id="smoke-front">
+    <ellipse
+      cx="155"
+      cy="510"
+      rx="105"
+      ry="95"
+      fill="url(#smoke-white)"
+      filter="url(#blur-large)"
+    />
+
+    <ellipse
+      cx="399"
+      cy="510"
+      rx="105"
+      ry="95"
+      fill="url(#smoke-white)"
+      filter="url(#blur-large)"
+    />
+
+    <ellipse
+      cx="260"
+      cy="700"
+      rx="60"
+      ry="90"
+      fill="url(#smoke-orange)"
+      filter="url(#blur-large)"
+    />
+  </g>
+
+  <!-- Original rocket: stays detailed and realistic -->
+  <g id="rocket" clip-path="url(#rocket-clip)">
+    <image
+  href="./rocket-original.webp"
+  x="0"
+  y="0"
+  width="554"
+  height="872"
+  preserveAspectRatio="xMidYMin meet"
+/>
+  </g>
+</svg>
