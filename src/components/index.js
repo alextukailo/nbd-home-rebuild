@@ -1,0 +1,9 @@
+export { initMenu as menu } from './menu.js';
+export { initHeader as header } from './header.js';
+export { initRocket as rocket } from './rocket.js';
+export { initScenes as scenes } from './scenes.js';
+export { initHeroTyping as heroTyping } from './heroTyping.js';
+export { initScrollTyping as scrollTyping } from './scrollTyping.js';
+export { initPayments as payments } from './payments.js';
+export { initContactForm as contactForm } from './contactForm.js';
+export { initCookies as cookies } from './cookies.js';
