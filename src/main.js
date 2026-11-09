@@ -207,6 +207,9 @@ const desktopMotion = window.matchMedia(
 const slideCount = slides.length;
 
 let scrollFrame = null;
+let lastScrollY = window.scrollY;
+let rocketScrollPower = 0;
+let rocketFireTimer = null;
 
 slides.forEach((slide) => {
   const cards = slide.querySelectorAll('.service-card');
@@ -295,11 +298,18 @@ function updateRocket(progress, viewportHeight) {
   rocketAnimation.style.opacity = '1';
 
   if (rocketExhaust) {
-    const flameLength = 1 + acceleration * 1.65;
+    const flameLength =
+      1 +
+      acceleration * 1.65 +
+      rocketScrollPower * 1.3;
+
+    const thrust =
+      acceleration +
+      rocketScrollPower * 1.1;
 
     rocketExhaust.style.setProperty(
       '--thrust',
-      acceleration.toFixed(3)
+      thrust.toFixed(3)
     );
 
     rocketExhaust.style.setProperty(
@@ -374,9 +384,37 @@ function scheduleSceneUpdate() {
   scrollFrame = requestAnimationFrame(updateScene);
 }
 
+function handleRocketScroll() {
+  const currentScrollY = window.scrollY;
+  const scrollDelta = Math.abs(currentScrollY - lastScrollY);
+
+  lastScrollY = currentScrollY;
+
+  if (desktopMotion.matches && scrollDelta > 0) {
+    rocketScrollPower = clamp(
+      Math.max(
+        rocketScrollPower * 0.65,
+        scrollDelta / 50
+      ),
+      0,
+      1
+    );
+
+    window.clearTimeout(rocketFireTimer);
+
+    rocketFireTimer = window.setTimeout(() => {
+      rocketScrollPower = 0;
+      rocketFireTimer = null;
+      scheduleSceneUpdate();
+    }, 180);
+  }
+
+  scheduleSceneUpdate();
+}
+
 window.addEventListener(
   'scroll',
-  scheduleSceneUpdate,
+  handleRocketScroll,
   { passive: true }
 );
 
@@ -387,7 +425,15 @@ window.addEventListener(
 
 desktopMotion.addEventListener(
   'change',
-  scheduleSceneUpdate
+  () => {
+    rocketScrollPower = 0;
+    lastScrollY = window.scrollY;
+
+    window.clearTimeout(rocketFireTimer);
+    rocketFireTimer = null;
+
+    scheduleSceneUpdate();
+  }
 );
 
 document.querySelectorAll('a[href^="#slide-"]').forEach((link) => {
@@ -535,7 +581,6 @@ cookieActions.forEach(([id, value]) => {
     });
 });
 
-
 function typeText(element, text, duration) {
   return new Promise((resolve) => {
     const characters = Array.from(text);
@@ -665,3 +710,190 @@ async function playHeroTypingAnimation() {
 }
 
 playHeroTypingAnimation();
+
+function typeScrollText(element, text, duration) {
+  return new Promise((resolve) => {
+    const characters = Array.from(text);
+    let startTime = null;
+
+    element.classList.add('scroll-typing-active');
+
+    function animate(timestamp) {
+      if (startTime === null) {
+        startTime = timestamp;
+      }
+
+      const progress = Math.min(
+        (timestamp - startTime) / duration,
+        1
+      );
+
+      const visibleCount = Math.floor(
+        progress * characters.length
+      );
+
+      element.textContent = characters
+        .slice(0, visibleCount)
+        .join('');
+
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+        return;
+      }
+
+      element.textContent = text;
+      element.classList.remove('scroll-typing-active');
+      resolve();
+    }
+
+    requestAnimationFrame(animate);
+  });
+}
+
+function setupScrollTyping() {
+  if (
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  ) {
+    return;
+  }
+
+  const sections = [
+    document.querySelector('#slide-2'),
+    document.querySelector('#slide-3'),
+    document.querySelector('#slide-4'),
+    document.querySelector('#contact'),
+  ].filter(Boolean);
+
+  const sequences = new Map();
+
+  sections.forEach((section) => {
+    const isContact = section.id === 'contact';
+
+    const heading = section.querySelector(
+      isContact ? '.contact-heading' : '.scene-heading'
+    );
+
+    const targets = isContact
+      ? [
+          heading,
+          section.querySelector('.contact-intro'),
+        ]
+      : [
+          ...section.querySelectorAll(
+            '.scene-heading .hero-accent'
+          ),
+          section.querySelector('.scene-subheading'),
+          section.querySelector(
+            '.scene-copy > .scene-description'
+          ),
+        ];
+
+    const elements = targets.filter(Boolean);
+
+    if (!elements.length) {
+      return;
+    }
+
+    const containers = [
+      heading,
+      ...elements.filter(
+        (element) => !element.closest('.scene-heading')
+      ),
+    ].filter(Boolean);
+
+    containers.forEach((element) => {
+      const height = element.getBoundingClientRect().height;
+
+      element.style.minHeight = `${Math.ceil(height)}px`;
+    });
+
+    const sequence = elements.map((element) => {
+      const text = element.textContent
+        .replace(/\s+/g, ' ')
+        .trim();
+
+      const duration = Math.max(
+        250,
+        Math.min(text.length * 6, 1100)
+      );
+
+      return {
+        element,
+        text,
+        duration,
+      };
+    });
+
+    if (heading) {
+      const headingText = heading.textContent
+        .replace(/\s+/g, ' ')
+        .trim();
+
+      heading.setAttribute('aria-label', headingText);
+    }
+
+    sequence.forEach(({ element }) => {
+      element.textContent = '';
+    });
+
+    const trigger = section.querySelector(
+      isContact ? '.contact-panel' : '.scene-copy'
+    );
+
+    if (trigger) {
+      sequences.set(trigger, {
+        sequence,
+        containers,
+      });
+    }
+  });
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) {
+          return;
+        }
+
+        const config = sequences.get(entry.target);
+
+        if (!config) {
+          return;
+        }
+
+        observer.unobserve(entry.target);
+        sequences.delete(entry.target);
+
+        const play = async () => {
+          for (const item of config.sequence) {
+            await typeScrollText(
+              item.element,
+              item.text,
+              item.duration
+            );
+
+            await new Promise((resolve) => {
+              setTimeout(resolve, 50);
+            });
+          }
+
+          config.containers.forEach((element) => {
+            element.style.removeProperty('min-height');
+          });
+        };
+
+        play();
+      });
+    },
+    {
+      root: null,
+      threshold: 0.25,
+    }
+  );
+
+  sequences.forEach((_, element) => {
+    observer.observe(element);
+  });
+}
+
+setupScrollTyping();

@@ -11,6 +11,262 @@
   --color-nbd-navy: #234267;
 }
 
+.page-body {
+  @apply overflow-x-hidden bg-[#f6f4f2] font-sans text-[#234267] antialiased;
+}
+
+.skip-link {
+  @apply sr-only;
+}
+
+.skip-link:focus {
+  @apply not-sr-only fixed left-4 top-4 z-[100] bg-white p-3;
+}
+
+.site-header {
+  @apply fixed inset-x-0 top-0 z-40 text-white;
+}
+
+.site-header__inner {
+  @apply mx-auto flex h-[120px] max-w-[1440px] items-start justify-between px-6 pt-6;
+}
+
+.site-header__logo {
+  @apply w-[190px];
+}
+
+.site-header__actions {
+  @apply flex items-center gap-6;
+}
+
+.site-header__phone-box {
+  @apply hidden text-right;
+}
+
+.site-header__phone {
+  @apply block text-xl font-black leading-tight;
+}
+
+.site-header__phone-caption {
+  @apply text-xs font-semibold;
+}
+
+.site-header__menu-button {
+  @apply flex h-11 w-11 cursor-pointer items-center justify-center;
+}
+
+.site-header__menu-icon {
+  @apply h-7 w-8 text-[#14a8ed];
+}
+
+.hero-scene {
+  @apply relative flex min-h-screen items-center overflow-hidden text-white;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  isolation: isolate;
+}
+
+.scene-layout {
+  @apply relative z-10 mx-auto w-full max-w-[1440px] px-6 py-20;
+}
+
+.scene-layout--first {
+  @apply py-24;
+}
+
+.scene-copy {
+  @apply max-w-[850px];
+}
+
+.scene-copy--wide {
+  @apply max-w-[950px];
+}
+
+.scene-heading {
+  @apply mb-7 font-black;
+  font-size: clamp(44px, 4.5vw, 72px);
+  line-height: 1.08;
+}
+
+.scene-heading--first {
+  @apply mb-8 tracking-tight;
+  font-size: clamp(42px, 4.5vw, 72px);
+}
+
+.scene-heading--last {
+  @apply mb-8;
+}
+
+.scene-subheading {
+  @apply mb-5 max-w-[780px] font-black leading-snug;
+  font-size: clamp(20px, 1.65vw, 27px);
+}
+
+.scene-subheading--narrow {
+  @apply max-w-[750px];
+}
+
+.scene-subheading--wide {
+  @apply max-w-[820px];
+}
+
+.scene-description {
+  @apply max-w-[790px] text-[18px] font-medium;
+  line-height: 1.55;
+}
+
+.scene-description--wide {
+  @apply max-w-[870px];
+}
+
+.hero-button {
+  @apply mt-10 inline-flex min-h-[54px] items-center justify-center bg-[#ef3e42] px-10 text-lg font-bold text-white transition-colors;
+}
+
+.hero-button:hover {
+  @apply bg-[#d72b33];
+}
+
+.hero-button--large {
+  @apply mt-14 min-h-[62px] min-w-[200px] rounded-md text-[20px];
+}
+
+.services-grid {
+  @apply mt-14 grid max-w-[960px] gap-y-10;
+}
+
+.services-grid--four {
+  @apply grid-cols-2 gap-x-6;
+}
+
+.services-grid--three {
+  @apply grid-cols-1 gap-x-8;
+}
+
+.service-card {
+  @apply flex flex-col items-center text-center;
+  transition: filter 0.25s ease;
+}
+
+.service-card__image {
+  @apply mb-4 h-[130px] w-[130px] object-contain;
+  transition: transform 0.3s ease;
+}
+
+.service-card:hover .service-card__image {
+  transform: translateY(-5px);
+}
+
+.service-card__title {
+  @apply font-black leading-tight;
+  font-size: clamp(17px, 1.4vw, 24px);
+}
+
+.service-card__title--detail {
+  @apply mb-4;
+  font-size: clamp(18px, 1.4vw, 24px);
+}
+
+.service-card__description {
+  @apply max-w-[280px] text-[16px] font-medium;
+  line-height: 1.45;
+}
+
+.contact-section {
+  @apply bg-[#f6f4f2] px-6 py-20;
+}
+
+.contact-panel {
+  @apply mx-auto max-w-[960px] rounded-lg bg-white p-7 shadow-lg;
+}
+
+.contact-heading {
+  @apply mb-3 text-center text-3xl font-black;
+}
+
+.contact-intro {
+  @apply mb-8 text-center;
+}
+
+.contact-form {
+  @apply mx-auto flex max-w-[760px] flex-col gap-4;
+}
+
+.form-input {
+  @apply min-h-12 flex-1 rounded border border-[#b4c5d6] px-4;
+}
+
+.consent-label {
+  @apply flex w-full items-start gap-3 text-sm;
+}
+
+.consent-checkbox {
+  @apply mt-1;
+}
+
+.form-submit {
+  @apply min-h-12 rounded bg-[#0065af] px-8 font-bold text-white;
+}
+
+.form-notice {
+  @apply w-full text-sm font-semibold text-[#0065af];
+}
+
+.site-footer {
+  @apply bg-white px-6 pb-12 pt-8 text-center text-sm;
+}
+
+.payments-viewport {
+  @apply mx-auto mb-10 max-w-[1040px] overflow-hidden;
+}
+
+.payment-track {
+  @apply flex w-max items-center gap-10;
+  animation: payment-travel 32s linear infinite;
+}
+
+.payment-track:hover {
+  animation-play-state: paused;
+}
+
+.footer-info {
+  @apply mx-auto max-w-[950px] leading-7;
+}
+
+.footer-links {
+  @apply mx-auto mt-8 flex max-w-[1000px] flex-wrap justify-center gap-5 text-xs underline;
+}
+
+.cookie-panel {
+  @apply fixed bottom-4 left-1/2 z-[80] w-[calc(100%-2rem)] max-w-[600px] -translate-x-1/2 rounded-lg bg-white p-5 text-center;
+  box-shadow: 0 0 50px rgb(0 0 0 / 15%);
+}
+
+.cookie-title {
+  @apply mb-3 text-xl font-black text-[#007bff];
+}
+
+.cookie-description {
+  @apply mb-4 text-sm leading-relaxed text-[#005bbc];
+}
+
+.cookie-actions {
+  @apply flex gap-3;
+}
+
+.cookie-button {
+  @apply min-h-11 flex-1 rounded px-4 text-sm font-bold;
+}
+
+.cookie-button--primary {
+  @apply bg-[#007bff] text-white;
+}
+
+.cookie-button--secondary {
+  @apply border border-[#007bff] text-[#007bff];
+}
+
 :root {
   font-family: var(--font-sans);
 }
@@ -28,13 +284,6 @@ body {
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
   padding: 0 0.045em 0.06em;
-}
-
-.hero-scene {
-  position: relative;
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: cover;
 }
 
 .hero-first {
@@ -55,6 +304,27 @@ body {
 .hero-fourth {
   background-color: #050914;
   background-image: url('./assets/images/slaid_4.webp');
+}
+
+.hero-first,
+.hero-second,
+.hero-third,
+.hero-fourth {
+  --overlay-opacity: 0.50;
+}
+
+.hero-scene::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: rgb(0 15 35 / var(--overlay-opacity, 0.2));
+  pointer-events: none;
+}
+
+.hero-scene > div {
+  position: relative;
+  z-index: 1;
 }
 
 .reverse-slide {
@@ -248,14 +518,6 @@ input:focus-visible {
   font-size: 13px;
 }
 
-.payment-track {
-  animation: payment-travel 32s linear infinite;
-}
-
-.payment-track:hover {
-  animation-play-state: paused;
-}
-
 @keyframes payment-travel {
   from {
     transform: translateX(0);
@@ -314,6 +576,9 @@ input:focus-visible {
   opacity: var(--flame-opacity);
   pointer-events: none;
   isolation: isolate;
+  transition:
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.3s ease-out;
 }
 
 .exhaust-glow {
@@ -526,16 +791,73 @@ input:focus-visible {
   }
 }
 
-.service-card {
-  transition: filter 0.25s ease;
+@media (min-width: 640px) {
+  .site-header__inner,
+  .scene-layout {
+    @apply px-10;
+  }
+
+  .site-header__logo {
+    @apply w-[260px];
+  }
+
+  .site-header__phone-box {
+    @apply block;
+  }
+
+  .contact-section,
+  .site-footer {
+    @apply px-10;
+  }
+
+  .footer-links {
+    @apply text-sm;
+  }
+
+  .services-grid--three {
+    @apply grid-cols-3;
+  }
 }
 
-.service-card img {
-  transition: transform 0.3s ease;
+@media (min-width: 768px) {
+  .contact-panel {
+    @apply p-12;
+  }
+
+  .contact-heading {
+    @apply text-4xl;
+  }
+
+  .contact-form {
+    @apply flex-row flex-wrap;
+  }
 }
 
-.service-card:hover img {
-  transform: translateY(-5px);
+@media (min-width: 1024px) {
+  .site-header__inner,
+  .scene-layout {
+    @apply px-[5%];
+  }
+
+  .site-header__logo {
+    @apply w-[300px];
+  }
+
+  .site-header__actions {
+    @apply gap-14;
+  }
+
+  .site-header__phone {
+    @apply text-[26px];
+  }
+
+  .site-header__phone-caption {
+    @apply text-base;
+  }
+
+  .services-grid--four {
+    @apply grid-cols-4 gap-x-8;
+  }
 }
 
 @media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
@@ -672,7 +994,7 @@ input:focus-visible {
     padding: 20px 25px 25px;
   }
 
-  .service-card img {
+  .service-card__image {
     width: 86px;
     height: 86px;
   }
@@ -735,7 +1057,7 @@ input:focus-visible {
   .nbd-menu__chevron,
   .nbd-menu__submenu a,
   .service-card,
-  .service-card img {
+  .service-card__image {
     transition: none;
   }
 }
@@ -774,31 +1096,6 @@ input:focus-visible {
   border-radius: 20px;
   pointer-events: none;
 }
-
-
-.hero-scene {
-  isolation: isolate;
-}
-
-.hero-scene::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  background: rgb(0 15 35 / var(--overlay-opacity, 0.2));
-  pointer-events: none;
-}
-
-.hero-scene > div {
-  position: relative;
-  z-index: 1;
-}
-
-.hero-first, .hero-second, .hero-third, .hero-fourth {
-  --overlay-opacity: 0.30;
-}
-
-
 
 @media (min-width: 1024px) and (hover: hover) and (prefers-reduced-motion: no-preference) {
   #rocket-container #rocket-animation {

@@ -24,38 +24,30 @@
     <script type="module" src="/src/main.js"></script>
   </head>
 
-  <body class="overflow-x-hidden bg-[#f6f4f2] font-sans text-[#234267] antialiased">
-    <a
-      href="#main"
-      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:bg-white focus:p-3"
-    >
+  <body class="page-body">
+    <a href="#main" class="skip-link">
       Перейти к содержанию
     </a>
 
-    <header
-      id="site-header"
-      class="fixed inset-x-0 top-0 z-40 text-white"
-    >
-      <div
-        class="mx-auto flex h-[120px] max-w-[1440px] items-start justify-between px-6 pt-6 sm:px-10 lg:px-[5%]"
-      >
+    <header id="site-header" class="site-header">
+      <div class="site-header__inner">
         <a href="#slide-1" aria-label="Наш Белый Дом — главная">
           <img
             src="https://nbd.by/assets/img/main_nbd_logo.svg"
             alt="Наш Белый Дом"
-            class="w-[190px] sm:w-[260px] lg:w-[300px]"
+            class="site-header__logo"
           />
         </a>
 
-        <div class="flex items-center gap-6 lg:gap-14">
-          <div class="hidden text-right sm:block">
+        <div class="site-header__actions">
+          <div class="site-header__phone-box">
             <a
               href="tel:+375333333227"
-              class="block text-xl font-black leading-tight lg:text-[26px]"
+              class="site-header__phone"
             >
               +375 333 333 227
             </a>
-            <span class="text-xs font-semibold lg:text-base">
+            <span class="site-header__phone-caption">
               Есть вопросы? Позвоните нам
             </span>
           </div>
@@ -66,11 +58,11 @@
             aria-label="Открыть меню"
             aria-controls="menu-panel"
             aria-expanded="false"
-            class="flex h-11 w-11 items-center justify-center cursor-pointer"
+            class="site-header__menu-button"
           >
             <svg
               viewBox="0 0 36 30"
-              class="h-7 w-8 text-[#14a8ed]"
+              class="site-header__menu-icon"
               fill="none"
               stroke="currentColor"
               stroke-width="3"
@@ -85,7 +77,7 @@
 
     <nav
       id="menu-panel"
-      class="nbd-menu fixed inset-0 z-50"
+      class="nbd-menu"
       aria-label="Основное меню"
       aria-hidden="true"
       hidden
@@ -258,25 +250,25 @@
               id="slide-1"
               aria-labelledby="title-1"
               style="--slide-index: 0"
-              class="reverse-slide hero-scene hero-first relative flex min-h-screen items-center overflow-hidden bg-[#0065af] text-white"
+              class="reverse-slide hero-scene hero-first"
             >
-              <div class="relative z-10 mx-auto w-full max-w-[1440px] px-6 py-24 sm:px-10 lg:px-[5%]">
-                <div class="max-w-[850px]">
+              <div class="scene-layout scene-layout--first">
+                <div class="scene-copy">
                   <h1
                     id="title-1"
-                    class="scene-heading mb-8 text-[clamp(42px,4.5vw,72px)] font-black leading-[1.08] tracking-tight"
+                    class="scene-heading scene-heading--first"
                   >
                     <span class="hero-accent">Влетаем в</span>
                     <br />
                     <span class="hero-accent">интернет-маркетинг</span>
                   </h1>
 
-                  <h2 class="mb-5 max-w-[750px] text-[clamp(20px,1.65vw,27px)] font-black leading-snug">
+                  <h2 class="scene-subheading scene-subheading--narrow">
                     Есть ли жизнь в Интернете? Нет ли жизни в Интернете?
                     Науке это не известно…
                   </h2>
 
-                  <p class="max-w-[790px] text-[16px] font-medium leading-[1.55]">
+                  <p class="scene-description">
                     А нам известно! Мы поможем красиво войти в мир
                     Интернет-маркетинга и заставим его работать на вас.
                     Найдем и реализуем подходящее для вас решение по любой
@@ -285,10 +277,7 @@
                     где штатные специалисты тонут в куче терминов и трендов.
                   </p>
 
-                  <a
-                    href="#slide-2"
-                    class="mt-10 inline-flex min-h-[54px] items-center justify-center bg-[#ef3e42] px-10 text-lg font-bold text-white transition-colors hover:bg-[#d72b33]"
-                  >
+                  <a href="#slide-2" class="hero-button">
                     Поехали!
                   </a>
                 </div>
@@ -299,23 +288,20 @@
               id="slide-2"
               aria-labelledby="title-2"
               style="--slide-index: 1"
-              class="reverse-slide hero-scene hero-second relative flex min-h-screen items-center overflow-hidden bg-[#1d61a7] text-white"
+              class="reverse-slide hero-scene hero-second"
             >
-              <div class="relative z-10 mx-auto w-full max-w-[1440px] px-6 py-20 sm:px-10 lg:px-[5%]">
-                <div class="max-w-[850px]">
-                  <h2
-                    id="title-2"
-                    class="scene-heading mb-7 text-[clamp(44px,4.5vw,72px)] font-black leading-[1.08]"
-                  >
+              <div class="scene-layout">
+                <div class="scene-copy">
+                  <h2 id="title-2" class="scene-heading">
                     <span class="hero-accent">Делаем сайт</span>
                   </h2>
 
-                  <h3 class="mb-5 max-w-[780px] text-[clamp(20px,1.65vw,27px)] font-black leading-snug">
+                  <h3 class="scene-subheading">
                     Постучи и тебе откроют! Сделай сайт и начни продавать
                     в Интернете!
                   </h3>
 
-                  <p class="max-w-[790px] text-[16px] font-medium leading-[1.55]">
+                  <p class="scene-description">
                     Да, первый шаг на пути к работающему интернет-маркетингу —
                     создать собственный сайт. Будь это простой одностраничник
                     или корпоративный гигант со сложной структурой,
@@ -325,45 +311,45 @@
                   </p>
                 </div>
 
-                <div class="mt-14 grid max-w-[960px] grid-cols-2 gap-x-6 gap-y-10 lg:grid-cols-4 lg:gap-x-8">
+                <div class="services-grid services-grid--four">
                   <a
                     href="https://nbd.by/internet-magazin.html"
-                    class="service-card group flex flex-col items-center text-center"
+                    class="service-card"
                   >
                     <img
                       src="https://nbd.by/assets/img/second_slide_img_1.svg"
                       alt=""
-                      class="mb-4 h-[130px] w-[130px] object-contain"
+                      class="service-card__image"
                     />
-                    <h4 class="text-[clamp(17px,1.4vw,24px)] font-black leading-tight">
+                    <h4 class="service-card__title">
                       Интернет-магазины
                     </h4>
                   </a>
 
                   <a
                     href="https://nbd.by/lendingi.html"
-                    class="service-card group flex flex-col items-center text-center"
+                    class="service-card"
                   >
                     <img
                       src="https://nbd.by/assets/img/second_slide_img_2.svg"
                       alt=""
-                      class="mb-4 h-[130px] w-[130px] object-contain"
+                      class="service-card__image"
                     />
-                    <h4 class="text-[clamp(17px,1.4vw,24px)] font-black leading-tight">
+                    <h4 class="service-card__title">
                       Лендинги
                     </h4>
                   </a>
 
                   <a
                     href="https://nbd.by/sajtyi-gosudarstvennyix-uchrezhdenij.html"
-                    class="service-card group flex flex-col items-center text-center"
+                    class="service-card"
                   >
                     <img
                       src="https://nbd.by/assets/img/second_slide_img_3.svg"
                       alt=""
-                      class="mb-4 h-[130px] w-[130px] object-contain"
+                      class="service-card__image"
                     />
-                    <h4 class="text-[clamp(17px,1.4vw,24px)] font-black leading-tight">
+                    <h4 class="service-card__title">
                       Сайты
                       <br />
                       гос учреждений
@@ -372,14 +358,14 @@
 
                   <a
                     href="https://nbd.by/korporativnyij-sajt.html"
-                    class="service-card group flex flex-col items-center text-center"
+                    class="service-card"
                   >
                     <img
                       src="https://nbd.by/assets/img/second_slide_img_4.svg"
                       alt=""
-                      class="mb-4 h-[130px] w-[130px] object-contain"
+                      class="service-card__image"
                     />
-                    <h4 class="text-[clamp(17px,1.4vw,24px)] font-black leading-tight">
+                    <h4 class="service-card__title">
                       Корпоративные
                       <br />
                       сайты
@@ -393,23 +379,20 @@
               id="slide-3"
               aria-labelledby="title-3"
               style="--slide-index: 2"
-              class="reverse-slide hero-scene hero-third relative flex min-h-screen items-center overflow-hidden bg-[#dce6ef] text-white"
+              class="reverse-slide hero-scene hero-third"
             >
-              <div class="relative z-10 mx-auto w-full max-w-[1440px] px-6 py-20 sm:px-10 lg:px-[5%]">
-                <div class="max-w-[850px]">
-                  <h2
-                    id="title-3"
-                    class="scene-heading mb-7 text-[clamp(44px,4.5vw,72px)] font-black leading-[1.08]"
-                  >
+              <div class="scene-layout">
+                <div class="scene-copy">
+                  <h2 id="title-3" class="scene-heading">
                     <span class="hero-accent">Сайт уже есть!</span>
                   </h2>
 
-                  <h3 class="mb-5 max-w-[780px] text-[clamp(20px,1.65vw,27px)] font-black leading-snug">
+                  <h3 class="scene-subheading">
                     но заявки с него столь же редкое явление,
                     как появление в небе Большой кометы?
                   </h3>
 
-                  <p class="max-w-[790px] text-[16px] font-medium leading-[1.55]">
+                  <p class="scene-description">
                     К сожалению, ни один сайт (особенно коммерческий)
                     не будет работать без продвижения.
                     Чтобы потенциальный клиент заметил вас,
@@ -418,20 +401,20 @@
                   </p>
                 </div>
 
-                <div class="mt-14 grid max-w-[960px] grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-3">
+                <div class="services-grid services-grid--three">
                   <a
                     href="https://nbd.by/seo-prodvizhenie.html"
-                    class="service-card group flex flex-col items-center text-center"
+                    class="service-card"
                   >
                     <img
                       src="https://nbd.by/assets/img/second_slide_img_2.svg"
                       alt=""
-                      class="mb-4 h-[130px] w-[130px] object-contain"
+                      class="service-card__image"
                     />
-                    <h4 class="mb-4 text-[clamp(18px,1.4vw,24px)] font-black leading-tight">
+                    <h4 class="service-card__title service-card__title--detail">
                       SEO и Продвижение
                     </h4>
-                    <p class="max-w-[280px] text-[16px] font-medium leading-[1.45]">
+                    <p class="service-card__description">
                       Мы используем все приемы, чтобы ваш сайт
                       работал с максимальной отдачей!
                     </p>
@@ -439,17 +422,17 @@
 
                   <a
                     href="https://nbd.by/texnicheskaya-podderzhka.html"
-                    class="service-card group flex flex-col items-center text-center"
+                    class="service-card"
                   >
                     <img
                       src="https://nbd.by/assets/img/second_slide_img_3.svg"
                       alt=""
-                      class="mb-4 h-[130px] w-[130px] object-contain"
+                      class="service-card__image"
                     />
-                    <h4 class="mb-4 text-[clamp(18px,1.4vw,24px)] font-black leading-tight">
+                    <h4 class="service-card__title service-card__title--detail">
                       Техподдержка
                     </h4>
-                    <p class="max-w-[280px] text-[16px] font-medium leading-[1.45]">
+                    <p class="service-card__description">
                       Всю работу по постоянному обновлению
                       сайта мы возьмем на себя!
                     </p>
@@ -457,17 +440,17 @@
 
                   <a
                     href="https://nbd.by/kontekstnaya-reklama.html"
-                    class="service-card group flex flex-col items-center text-center"
+                    class="service-card"
                   >
                     <img
                       src="https://nbd.by/assets/img/second_slide_img_4.svg"
                       alt=""
-                      class="mb-4 h-[130px] w-[130px] object-contain"
+                      class="service-card__image"
                     />
-                    <h4 class="mb-4 text-[clamp(18px,1.4vw,24px)] font-black leading-tight">
+                    <h4 class="service-card__title service-card__title--detail">
                       Контекстная реклама
                     </h4>
-                    <p class="max-w-[280px] text-[16px] font-medium leading-[1.45]">
+                    <p class="service-card__description">
                       Приведем клиентов для быстрого старта
                       или поддержки отдела продаж.
                     </p>
@@ -480,25 +463,25 @@
               id="slide-4"
               aria-labelledby="title-4"
               style="--slide-index: 3"
-              class="reverse-slide hero-scene hero-fourth relative flex min-h-screen items-center overflow-hidden bg-[#050914] text-white"
+              class="reverse-slide hero-scene hero-fourth"
             >
-              <div class="relative z-10 mx-auto w-full max-w-[1440px] px-6 py-20 sm:px-10 lg:px-[5%]">
-                <div class="max-w-[950px]">
+              <div class="scene-layout">
+                <div class="scene-copy scene-copy--wide">
                   <h2
                     id="title-4"
-                    class="scene-heading mb-8 text-[clamp(44px,4.5vw,72px)] font-black leading-[1.08]"
+                    class="scene-heading scene-heading--last"
                   >
                     <span class="hero-accent">Замыкаем маркетинговую</span>
                     <br />
                     <span class="hero-accent">воронку</span>
                   </h2>
 
-                  <h3 class="mb-5 max-w-[820px] text-[clamp(20px,1.65vw,27px)] font-black leading-snug">
+                  <h3 class="scene-subheading scene-subheading--wide">
                     Итак, основные процессы запущены,
                     но кажется, что чего-то не хватает…
                   </h3>
 
-                  <p class="max-w-[870px] text-[16px] font-medium leading-[1.55]">
+                  <p class="scene-description scene-description--wide">
                     Интернет-маркетинг — такая сфера, где нельзя дойти
                     до финиша. Вам нужно постоянно думать, как
                     поддерживать контакт со своей аудиторией.
@@ -509,7 +492,7 @@
 
                   <a
                     href="https://nbd.by/dopolnitelnyie-uslugi/"
-                    class="mt-14 inline-flex min-h-[62px] min-w-[200px] items-center justify-center rounded-md bg-[#ef3e42] px-10 text-[20px] font-bold text-white transition-colors hover:bg-[#d72b33]"
+                    class="hero-button hero-button--large"
                   >
                     Узнать!
                   </a>
@@ -518,11 +501,7 @@
             </section>
           </div>
 
-          <div
-            id="rocket-container"
-            class="pointer-events-none absolute inset-0 z-20 hidden overflow-hidden lg:block"
-            aria-hidden="true"
-          >
+          <div id="rocket-container" aria-hidden="true">
             <div id="rocket-animation" class="rocket-animation">
               <div id="rocket-exhaust" class="rocket-exhaust">
                 <div class="exhaust-glow"></div>
@@ -548,31 +527,25 @@
       <section
         id="contact"
         aria-labelledby="contact-title"
-        class="bg-[#f6f4f2] px-6 py-20 sm:px-10"
+        class="contact-section"
       >
-        <div class="mx-auto max-w-[960px] rounded-lg bg-white p-7 shadow-lg md:p-12">
-          <h2
-            id="contact-title"
-            class="mb-3 text-center text-3xl font-black md:text-4xl"
-          >
+        <div class="contact-panel">
+          <h2 id="contact-title" class="contact-heading">
             Получить консультацию
           </h2>
 
-          <p class="mb-8 text-center">
+          <p class="contact-intro">
             Оставьте контакты — перезвоним и подскажем лучшее решение.
           </p>
 
-          <form
-            id="demo-contact"
-            class="mx-auto flex max-w-[760px] flex-col gap-4 md:flex-row md:flex-wrap"
-          >
+          <form id="demo-contact" class="contact-form">
             <input
               name="name"
               autocomplete="name"
               placeholder="Имя"
               aria-label="Имя"
               required
-              class="min-h-12 flex-1 rounded border border-[#b4c5d6] px-4"
+              class="form-input"
             />
 
             <input
@@ -582,11 +555,11 @@
               placeholder="Ваш номер телефона"
               aria-label="Ваш номер телефона"
               required
-              class="min-h-12 flex-1 rounded border border-[#b4c5d6] px-4"
+              class="form-input"
             />
 
-            <label class="flex w-full items-start gap-3 text-sm">
-              <input type="checkbox" required class="mt-1" />
+            <label class="consent-label">
+              <input type="checkbox" required class="consent-checkbox" />
               <span>
                 Я выражаю согласие
                 <a
@@ -600,17 +573,14 @@
               </span>
             </label>
 
-            <button
-              type="submit"
-              class="min-h-12 rounded bg-[#0065af] px-8 font-bold text-white"
-            >
+            <button type="submit" class="form-submit">
               Отправить
             </button>
 
             <p
               id="demo-form-notice"
               role="status"
-              class="hidden w-full text-sm font-semibold text-[#0065af]"
+              class="form-notice hidden"
             >
               Это демонстрационная форма. Данные не отправляются.
             </p>
@@ -619,18 +589,15 @@
       </section>
     </main>
 
-    <footer class="bg-white px-6 pb-12 pt-8 text-center text-sm sm:px-10">
+    <footer class="site-footer">
       <div
-        class="mx-auto mb-10 max-w-[1040px] overflow-hidden"
+        class="payments-viewport"
         aria-label="Платежные системы"
       >
-        <div
-          id="payment-track"
-          class="payment-track flex w-max items-center gap-10"
-        ></div>
+        <div id="payment-track" class="payment-track"></div>
       </div>
 
-      <p class="mx-auto max-w-[950px] leading-7">
+      <p class="footer-info">
         Частное унитарное предприятие «Наш Белый Дом»
         <br />
         Республика Беларусь, г. Гродно, ул. 1 Мая д.7, офис 18
@@ -644,7 +611,7 @@
         </a>
       </p>
 
-      <div class="mx-auto mt-8 flex max-w-[1000px] flex-wrap justify-center gap-5 text-xs underline sm:text-sm">
+      <div class="footer-links">
         <a href="https://nbd.by/politika-v-otnoshenii-obrabotki-personalnyix-dannyix.html">
           Политика обработки персональных данных
         </a>
@@ -659,23 +626,23 @@
 
     <aside
       id="cookie-panel"
-      class="cookie-panel fixed bottom-4 left-1/2 z-[80] w-[calc(100%-2rem)] max-w-[600px] -translate-x-1/2 rounded-lg bg-white p-5 text-center shadow-[0_0_50px_rgba(0,0,0,.15)]"
+      class="cookie-panel"
       aria-label="Настройки cookie"
       hidden
     >
-      <h2 class="mb-3 text-xl font-black text-[#007bff]">
+      <h2 class="cookie-title">
         Использование cookies
       </h2>
 
-      <p class="mb-4 text-sm leading-relaxed text-[#005bbc]">
+      <p class="cookie-description">
         Мы используем файлы cookie, необходимые для работы сайта.
       </p>
 
-      <div class="flex gap-3">
+      <div class="cookie-actions">
         <button
           id="cookie-all"
           type="button"
-          class="min-h-11 flex-1 rounded bg-[#007bff] px-4 text-sm font-bold text-white"
+          class="cookie-button cookie-button--primary"
         >
           Принять
         </button>
@@ -683,7 +650,7 @@
         <button
           id="cookie-essential"
           type="button"
-          class="min-h-11 flex-1 rounded border border-[#007bff] px-4 text-sm font-bold text-[#007bff]"
+          class="cookie-button cookie-button--secondary"
         >
           Отключить необязательные
         </button>
