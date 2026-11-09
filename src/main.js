@@ -6,6 +6,8 @@ const clamp = (value, min, max) => {
   return Math.min(max, Math.max(min, value));
 };
 
+const easeInCubic = (value) => value * value * value;
+
 const rocketImg = document.querySelector('#rocket-image');
 const rocketAnimation = document.querySelector('#rocket-animation');
 const rocketExhaust = document.querySelector('#rocket-exhaust');
@@ -23,6 +25,7 @@ const submenuToggle = document.querySelector('#submenu-toggle');
 const servicesSubmenu = document.querySelector('#services-submenu');
 
 let menuCloseTimer = null;
+let menuOpenFrame = null;
 let previousFocus = null;
 
 function setMenuOpen(isOpen) {
@@ -30,7 +33,14 @@ function setMenuOpen(isOpen) {
 
   window.clearTimeout(menuCloseTimer);
 
+  if (menuOpenFrame !== null) {
+    cancelAnimationFrame(menuOpenFrame);
+    menuOpenFrame = null;
+  }
+
   if (isOpen) {
+    if (!menuPanel.hidden) return;
+
     previousFocus = document.activeElement;
 
     menuPanel.hidden = false;
@@ -39,7 +49,11 @@ function setMenuOpen(isOpen) {
     document.body.classList.add('overflow-hidden');
     openButton.setAttribute('aria-expanded', 'true');
 
-    requestAnimationFrame(() => {
+    menuOpenFrame = requestAnimationFrame(() => {
+      menuOpenFrame = null;
+
+      if (menuPanel.hidden) return;
+
       menuPanel.classList.add('is-open');
       menuDrawer?.focus();
     });
@@ -50,7 +64,7 @@ function setMenuOpen(isOpen) {
   if (menuPanel.hidden) return;
 
   if (menuPanel.contains(document.activeElement)) {
-    openButton.focus();
+    openButton.focus({ preventScroll: true });
   }
 
   menuPanel.classList.remove('is-open');
@@ -58,15 +72,10 @@ function setMenuOpen(isOpen) {
   document.body.classList.remove('overflow-hidden');
 
   const finishClose = () => {
+    menuCloseTimer = null;
+
     menuPanel.hidden = true;
     menuPanel.setAttribute('aria-hidden', 'true');
-
-    const focusTarget =
-      previousFocus instanceof HTMLElement
-        ? previousFocus
-        : openButton;
-
-    focusTarget.focus();
   };
 
   const reducedMotion = window.matchMedia(
@@ -138,15 +147,19 @@ document.addEventListener('keydown', (event) => {
 
   if (
     event.shiftKey &&
-    (document.activeElement === first ||
-      document.activeElement === menuDrawer)
+    (
+      document.activeElement === first ||
+      document.activeElement === menuDrawer
+    )
   ) {
     event.preventDefault();
     last.focus();
   } else if (
     !event.shiftKey &&
-    (document.activeElement === last ||
-      document.activeElement === menuDrawer)
+    (
+      document.activeElement === last ||
+      document.activeElement === menuDrawer
+    )
   ) {
     event.preventDefault();
     first.focus();
@@ -157,12 +170,58 @@ const header = document.querySelector('#site-header');
 const reverseScroll = document.querySelector('#reverse-scroll');
 const slidesTrack = document.querySelector('#slides-track');
 
+const slides = Array.from(
+  document.querySelectorAll('.reverse-slide')
+);
+
 const desktopMotion = window.matchMedia(
   '(min-width: 1024px) and (prefers-reduced-motion: no-preference)'
 );
 
-const slideCount = 4;
+const slideCount = slides.length;
+
 let scrollFrame = null;
+
+slides.forEach((slide) => {
+  const cards = slide.querySelectorAll('.service-card');
+
+  cards.forEach((card, index) => {
+    card.style.setProperty('--card-index', String(index));
+  });
+});
+
+function getSceneTop() {
+  if (!reverseScroll) return 0;
+
+  return (
+    reverseScroll.getBoundingClientRect().top +
+    window.scrollY
+  );
+}
+
+function goToScene(index) {
+  const target = slides[index];
+
+  if (!target) return;
+
+  if (!desktopMotion.matches || !reverseScroll) {
+    target.scrollIntoView({
+      behavior: window.matchMedia(
+        '(prefers-reduced-motion: reduce)'
+      ).matches
+        ? 'auto'
+        : 'smooth',
+      block: 'start',
+    });
+
+    return;
+  }
+
+  window.scrollTo({
+    top: getSceneTop() + index * window.innerHeight,
+    behavior: 'smooth',
+  });
+}
 
 function updateRocket(progress, viewportHeight) {
   if (!rocketAnimation) return;
@@ -172,6 +231,7 @@ function updateRocket(progress, viewportHeight) {
     rocketAnimation.style.opacity = '1';
 
     if (rocketExhaust) {
+      rocketExhaust.style.removeProperty('--thrust');
       rocketExhaust.style.removeProperty('--flame-length');
       rocketExhaust.style.removeProperty('--flame-opacity');
     }
@@ -183,32 +243,37 @@ function updateRocket(progress, viewportHeight) {
 
   const slowProgress = clamp(slidePosition / 2, 0, 1);
   const launchProgress = clamp(slidePosition - 2, 0, 1);
-
-  const easeInCubic = (value) => value * value * value;
+  const acceleration = easeInCubic(launchProgress);
 
   const slowDistance = viewportHeight * 0.18;
-  const launchDistance = viewportHeight * 1.65;
+  const launchDistance = viewportHeight * 1.8;
 
   const translateY =
     -slowProgress * slowDistance -
-    easeInCubic(launchProgress) * launchDistance;
+    acceleration * launchDistance;
 
-  const rotation = -slowProgress * 1.5;
+  const translateX = -acceleration * 260;
+
+  const baseRotation = -slowProgress * 1.5;
+  const launchRotation = -acceleration * 18;
+  const rotation = baseRotation + launchRotation;
+
+  const scale = 1 - acceleration * 0.08;
 
   rocketAnimation.style.transform = `
-    translate3d(0, ${translateY}px, 0)
+    translate3d(${translateX}px, ${translateY}px, 0)
     rotate(${rotation}deg)
+    scale(${scale})
   `;
 
   rocketAnimation.style.opacity = '1';
 
   if (rocketExhaust) {
-    const thrust = easeInCubic(launchProgress);
-    const flameLength = 1 + thrust * 1.4;
+    const flameLength = 1 + acceleration * 1.65;
 
     rocketExhaust.style.setProperty(
       '--thrust',
-      thrust.toFixed(3)
+      acceleration.toFixed(3)
     );
 
     rocketExhaust.style.setProperty(
@@ -223,10 +288,27 @@ function updateRocket(progress, viewportHeight) {
   }
 }
 
+function updateSlideEntrances(slidePosition) {
+  slides.forEach((slide, index) => {
+    if (slide.classList.contains('is-entered')) {
+      return;
+    }
+
+    const shouldEnter =
+      index === 0 || slidePosition >= index - 0.65;
+
+    if (shouldEnter) {
+      slide.classList.add('is-entered');
+    }
+  });
+}
+
 function updateScene() {
   scrollFrame = null;
 
-  if (!reverseScroll || !slidesTrack) return;
+  if (!reverseScroll || !slidesTrack || !slideCount) {
+    return;
+  }
 
   if (!desktopMotion.matches) {
     slidesTrack.style.removeProperty('--scroll-offset');
@@ -246,10 +328,7 @@ function updateScene() {
   }
 
   const viewportHeight = window.innerHeight;
-
-  const sceneTop =
-    reverseScroll.getBoundingClientRect().top +
-    window.scrollY;
+  const sceneTop = getSceneTop();
 
   const maxScroll = (slideCount - 1) * viewportHeight;
 
@@ -262,11 +341,14 @@ function updateScene() {
   const progress =
     maxScroll > 0 ? progressPx / maxScroll : 0;
 
+  const slidePosition = progress * (slideCount - 1);
+
   slidesTrack.style.setProperty(
     '--scroll-offset',
     `${progressPx}px`
   );
 
+  updateSlideEntrances(slidePosition);
   updateRocket(progress, viewportHeight);
 
   const highlightHeader =
@@ -286,7 +368,7 @@ function updateScene() {
 function scheduleSceneUpdate() {
   if (scrollFrame !== null) return;
 
-  scrollFrame = window.requestAnimationFrame(updateScene);
+  scrollFrame = requestAnimationFrame(updateScene);
 }
 
 window.addEventListener(
@@ -295,57 +377,64 @@ window.addEventListener(
   { passive: true }
 );
 
-window.addEventListener(
-  'resize',
-  scheduleSceneUpdate
-);
+window.addEventListener('resize', scheduleSceneUpdate);
 
 desktopMotion.addEventListener(
   'change',
   scheduleSceneUpdate
 );
 
-document
-  .querySelectorAll('a[href^="#slide-"]')
-  .forEach((link) => {
-    link.addEventListener('click', (event) => {
-      if (!desktopMotion.matches || !reverseScroll) {
-        return;
-      }
+document.querySelectorAll('a[href^="#slide-"]').forEach((link) => {
+  link.addEventListener('click', (event) => {
+    const hash = link.getAttribute('href');
+    const target = document.querySelector(hash);
 
-      const hash = link.getAttribute('href');
-      const target = document.querySelector(hash);
+    if (!target) return;
 
-      if (!target) return;
+    const index = slides.indexOf(target);
 
-      const index = Number(
-        target.style
-          .getPropertyValue('--slide-index')
-          .trim()
-      );
+    if (index < 0 || !desktopMotion.matches) return;
 
-      if (!Number.isInteger(index)) return;
+    event.preventDefault();
 
-      event.preventDefault();
+    goToScene(index);
 
-      const sceneTop =
-        reverseScroll.getBoundingClientRect().top +
-        window.scrollY;
-
-      window.scrollTo({
-        top: sceneTop + index * window.innerHeight,
-        behavior: 'smooth',
-      });
-
-      history.replaceState(
-        null,
-        '',
-        `#slide-${index + 1}`
-      );
-    });
+    history.replaceState(null, '', hash);
   });
+});
 
 updateScene();
+
+if (desktopMotion.matches && slides.length) {
+  document.documentElement.classList.add('motion-ready');
+}
+
+const ignitionPlasma = rocketAnimation?.querySelector(
+  '.exhaust-plasma'
+);
+
+if (
+  desktopMotion.matches &&
+  rocketAnimation &&
+  ignitionPlasma &&
+  window.scrollY < window.innerHeight * 0.2
+) {
+  ignitionPlasma.addEventListener(
+    'animationend',
+    (event) => {
+      if (
+        event.target === ignitionPlasma &&
+        event.animationName === 'engine-ignite'
+      ) {
+        rocketAnimation.classList.remove('is-igniting');
+      }
+    }
+  );
+
+  requestAnimationFrame(() => {
+    rocketAnimation.classList.add('is-igniting');
+  });
+}
 
 const paymentIds = [
   22,
@@ -398,13 +487,16 @@ contactForm?.addEventListener('submit', (event) => {
 });
 
 const cookiePanel = document.querySelector('#cookie-panel');
+
 const COOKIE_STORAGE_KEY = 'nbd-demo-cookie-choice';
 
 if (cookiePanel) {
   let cookieChoice = null;
 
   try {
-    cookieChoice = localStorage.getItem(COOKIE_STORAGE_KEY);
+    cookieChoice = localStorage.getItem(
+      COOKIE_STORAGE_KEY
+    );
   } catch {
     cookieChoice = null;
   }
@@ -422,9 +514,12 @@ cookieActions.forEach(([id, value]) => {
     .querySelector(`#${id}`)
     ?.addEventListener('click', () => {
       try {
-        localStorage.setItem(COOKIE_STORAGE_KEY, value);
+        localStorage.setItem(
+          COOKIE_STORAGE_KEY,
+          value
+        );
       } catch {
-        // Storage may be unavailable.
+        // Storage is optional.
       }
 
       if (cookiePanel) {
