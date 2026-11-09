@@ -167,6 +167,32 @@ document.addEventListener('keydown', (event) => {
 });
 
 const header = document.querySelector('#site-header');
+const contactSection = document.querySelector('#contact');
+
+if (header && contactSection) {
+  const contactObserver = new IntersectionObserver(
+    ([entry]) => {
+      const isVisible = entry.isIntersecting;
+
+      header.classList.toggle(
+        'bg-[#234267]/95',
+        isVisible
+      );
+
+      header.classList.toggle(
+        'shadow-md',
+        isVisible
+      );
+    },
+    {
+      root: null,
+      threshold: 0,
+    }
+  );
+
+  contactObserver.observe(contactSection);
+}
+
 const reverseScroll = document.querySelector('#reverse-scroll');
 const slidesTrack = document.querySelector('#slides-track');
 
@@ -313,16 +339,6 @@ function updateScene() {
   if (!desktopMotion.matches) {
     slidesTrack.style.removeProperty('--scroll-offset');
 
-    header?.classList.toggle(
-      'bg-[#234267]/95',
-      window.scrollY > 40
-    );
-
-    header?.classList.toggle(
-      'shadow-md',
-      window.scrollY > 40
-    );
-
     updateRocket(0, window.innerHeight);
     return;
   }
@@ -350,19 +366,6 @@ function updateScene() {
 
   updateSlideEntrances(slidePosition);
   updateRocket(progress, viewportHeight);
-
-  const highlightHeader =
-    progressPx > viewportHeight * 0.4;
-
-  header?.classList.toggle(
-    'bg-[#234267]/95',
-    highlightHeader
-  );
-
-  header?.classList.toggle(
-    'shadow-md',
-    highlightHeader
-  );
 }
 
 function scheduleSceneUpdate() {
@@ -377,7 +380,10 @@ window.addEventListener(
   { passive: true }
 );
 
-window.addEventListener('resize', scheduleSceneUpdate);
+window.addEventListener(
+  'resize',
+  scheduleSceneUpdate
+);
 
 desktopMotion.addEventListener(
   'change',
@@ -428,7 +434,8 @@ if (
       ) {
         rocketAnimation.classList.remove('is-igniting');
       }
-    }
+    },
+    { once: true }
   );
 
   requestAnimationFrame(() => {
@@ -483,6 +490,7 @@ const contactNotice = document.querySelector('#demo-form-notice');
 
 contactForm?.addEventListener('submit', (event) => {
   event.preventDefault();
+
   contactNotice?.classList.remove('hidden');
 });
 
@@ -519,7 +527,6 @@ cookieActions.forEach(([id, value]) => {
           value
         );
       } catch {
-        // Storage is optional.
       }
 
       if (cookiePanel) {
